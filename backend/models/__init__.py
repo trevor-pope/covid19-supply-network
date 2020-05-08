@@ -7,14 +7,24 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'users'
 
-    userid = Column(Integer, primary_key=True)
+    username = Column(String)
+    password = Column(String)
+    email = Column(String, primary_key=True)
+    phone = Column(String)
+    picture = Column(String)
+    street = Column(String)
+    city = Column(String)
+    state = Column(String)
+    zipcode = Column(String)
     fname = Column(String)
     lname = Column(String)
-    username = Column(String)
-    password = Column(Binary)
-    email = Column(String)
+    num_transactions = Column(String)
+    rating = Column(Integer)
+
+    def __init__(self):
+        username = ''
 
     def __str__(self):
-        return f'{self.fname} {self.lname}: {self.username}, {self.password}'
+        return f'{self.fname} {self.lname}'
 
 # class idk
