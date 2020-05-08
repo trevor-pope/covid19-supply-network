@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS `covid_supply`;
 CREATE DATABASE  IF NOT EXISTS `covid_supply` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `covid_supply`;
 -- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
