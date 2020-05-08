@@ -33,7 +33,7 @@ CREATE TABLE `offers` (
   `willing_to_transport` tinyint DEFAULT NULL,
   PRIMARY KEY (`offerId`),
   KEY `fk_email_idx` (`user_email`),
-  CONSTRAINT `fk_offer_email` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`)
+  CONSTRAINT `fk_offer_email` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -63,7 +63,7 @@ CREATE TABLE `requests` (
   `fulfilled` tinyint DEFAULT NULL,
   PRIMARY KEY (`requestId`),
   KEY `fk_email_idx` (`user_email`),
-  CONSTRAINT `fk_requests_email` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_requests_email` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -77,13 +77,13 @@ LOCK TABLES `requests` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `review`
+-- Table structure for table `reviews`
 --
 
-DROP TABLE IF EXISTS `review`;
+DROP TABLE IF EXISTS `reviews`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `review` (
+CREATE TABLE `reviews` (
   `reviewId` int NOT NULL,
   `transactionId` int DEFAULT NULL,
   `is_supplier` tinyint DEFAULT NULL,
@@ -96,12 +96,12 @@ CREATE TABLE `review` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `review`
+-- Dumping data for table `reviews`
 --
 
-LOCK TABLES `review` WRITE;
-/*!40000 ALTER TABLE `review` DISABLE KEYS */;
-/*!40000 ALTER TABLE `review` ENABLE KEYS */;
+LOCK TABLES `reviews` WRITE;
+/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -137,13 +137,13 @@ LOCK TABLES `transactions` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
+CREATE TABLE `users` (
   `username` varchar(16) NOT NULL,
   `password` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
@@ -152,22 +152,23 @@ CREATE TABLE `user` (
   `street` varchar(64) NOT NULL,
   `city` varchar(64) NOT NULL,
   `state` varchar(16) NOT NULL,
-  `zip` char(5) NOT NULL,
+  `zipcode` char(5) NOT NULL,
   `fname` varchar(32) NOT NULL,
   `lname` varchar(32) NOT NULL,
-  `num_transactions` varchar(45) NOT NULL,
+  `num_transactions` int NOT NULL,
   `rating` int NOT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `users`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('username','$2b$12$fLcAD3pw/zwEMIQEEA8FlOwX6wudgMdgJFVotJsoxCvD6dpdN6zdC','email','phone','picture','street','city','state','zipco','fname','lname',0,5);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -179,4 +180,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-08 16:49:09
+-- Dump completed on 2020-05-08 17:53:17
