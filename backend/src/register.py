@@ -1,5 +1,5 @@
 from flask_restplus import Namespace, Resource, fields
-from src import bcrypt, engine, session
+from src import bcrypt, session
 from models import User
 
 api = Namespace('register', description='Registration related operations')

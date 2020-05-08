@@ -1,3 +1,5 @@
+DATABASE_URL = "mysql+pymysql://root:password@localhost:3306/project"
+
 class Config(object):
     """Base config, uses staging database server."""
     DEBUG = False

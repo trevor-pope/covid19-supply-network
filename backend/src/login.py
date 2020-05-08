@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Resource, fields
-from src import bcrypt, engine, session
-from ..models import User
+from src import bcrypt, session
+from models import User
 
 api = Namespace('login', description='Login related operations')
 parser = api.parser()
