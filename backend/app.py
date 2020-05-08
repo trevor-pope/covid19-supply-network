@@ -4,9 +4,9 @@ from src import app
 
 api = Api(app)
 
-from src.streams import api
+from src.streams import api as api_main
 
-api.add_namespace(api)
+api.add_namespace(api_main)
 
 if __name__ == '__main__':
     app.run(debug=True)
