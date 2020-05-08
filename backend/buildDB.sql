@@ -18,9 +18,6 @@ CREATE TABLE User (
     Rating int NOT NULL,
 
     PRIMARY KEY (Email)
-
-    ON UPDATE CASCADE -- ?
-    ON DELETE CASCADE -- ?
 );
 
 CREATE TABLE Requests (
