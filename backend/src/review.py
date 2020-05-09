@@ -1,5 +1,5 @@
 from flask_restplus import Namespace, Resource
-from src import session
+from src import engine, session
 from models.user import User
 from models.request import Request
 import urllib3
@@ -20,9 +20,12 @@ class GetReviews(Resource):
     def get(self):
         args = parser1.parse_args()
         email = args.get('email')
-        requests_from_user = session.query(Request).join(Address).join().all()
 
-        return {'response': requests_from_user}
+        with engine.connect() as con:
+            reviews = con.execute('SELECT * FROM book')
+            print(reviews)
+        
+        return {'response': 'success'}
 
 
 @api.route('/getall')
