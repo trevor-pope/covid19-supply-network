@@ -4,11 +4,12 @@ from src import app
 
 api = Api(app)
 
-from src.streams import api as api_streams
-from src.auth import api as api_auth
 
-api.add_namespace(api_streams)
+from src.auth import api as api_auth
+from src.request import api as api_request
+
 api.add_namespace(api_auth)
+api.add_namespace(api_request)
 
 if __name__ == '__main__':
     app.run(debug=True)
