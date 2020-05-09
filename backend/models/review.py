@@ -34,4 +34,3 @@ class Request(Base):
                 'quantity': self.quantity,
                 'item': self.item,
                 'urgency': self.urgency}
-

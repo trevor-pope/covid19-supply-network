@@ -6,9 +6,11 @@ api = Api(app)
 
 from src.auth import api as api_auth
 from src.request import api as api_request
+from src.review import api as api_review
 
 api.add_namespace(api_auth)
 api.add_namespace(api_request)
+api.add_namespace(api_review)
 
 if __name__ == '__main__':
     app.run(debug=True)
