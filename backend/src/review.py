@@ -18,7 +18,7 @@ class GetReviews(Resource):
     Retrieve all reviews for a single user.
     """
 
-    @api.expect(parser)
+    @api.expect(parser1)
     def get(self):
         args = parser1.parse_args()
         email = args.get('email')
