@@ -7,10 +7,11 @@ import urllib3
 import json
 
 
-api = Namespace('request', description='Request related operations')
+api = Namespace('review', description='Review related operations')
+
 
 parser1 = api.parser()
-parser1.add_argument('email', location='args')
+parser1.add_argument('email', location='args', default='email')
 
 @api.route('/get')
 class GetReviews(Resource):
@@ -23,9 +24,15 @@ class GetReviews(Resource):
         args = parser1.parse_args()
         email = args.get('email')
 
+        query = f'''SELECT request_transactions.*
+                    FROM request_transactions JOIN requests ON requests.requestId = request_transactions.requestId
+                    WHERE user_email = "{email}"'''
+
         with engine.connect() as con:
-            reviews = con.execute('SELECT * FROM book')
-            print(reviews)
+            reviews = con.execute(query)
+        
+        for result in reviews:
+            print(result)
         
         return {'response': 'success'}
 
