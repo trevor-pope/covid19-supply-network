@@ -61,7 +61,6 @@ CREATE TABLE `requests` (
   `quantity` float DEFAULT NULL,
   `urgency` smallint DEFAULT NULL,
   `item` varchar(32) DEFAULT NULL,
-  `fulfilled` tinyint DEFAULT NULL,
   PRIMARY KEY (`requestId`),
   KEY `fk_email_idx` (`user_email`),
   CONSTRAINT `fk_requests_email` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
