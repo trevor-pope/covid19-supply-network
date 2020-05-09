@@ -8,7 +8,7 @@ import json
 api = Namespace('request', description='Request related operations')
 
 
-@api.route('/getusersurplus')
+@api.route('/getuser')
 class RequestsGetUser(Resource):
     """
     Retrieve all requests for a single user.
