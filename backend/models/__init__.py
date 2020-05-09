@@ -1,7 +1,3 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, ForeignKey
-from sqlalchemy import Integer, String, Binary, Float
-
 Base = declarative_base()
 
 class User(Base):
