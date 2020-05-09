@@ -31,9 +31,8 @@ class RequestsGetAll(Resource):
     Retrieve all requests from all users, with optional sorting and searching parameters.
     """
     parser = api.parser()
-    parser.add_argument('email', location='args')
-    parser.add_argument('sort', location='args')
-    parser.add_argument('item_filter', location='args')
+    for arg in ['email', 'sort', 'item_filter']:
+        parser.add_argument(arg, location='args')
 
     @api.expect(parser)
     def get(self):

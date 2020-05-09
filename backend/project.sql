@@ -1,4 +1,3 @@
-DROP DATABASE IF EXISTS `covid_supply`;
 CREATE DATABASE  IF NOT EXISTS `covid_supply` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `covid_supply`;
 -- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
@@ -17,6 +16,35 @@ USE `covid_supply`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `offer_transactions`
+--
+
+DROP TABLE IF EXISTS `offer_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `offer_transactions` (
+  `transactionId` int NOT NULL,
+  `offerId` int DEFAULT NULL,
+  `quantity_fulfilled` varchar(45) DEFAULT NULL,
+  `transaction_date` datetime DEFAULT NULL,
+  `final_cost` varchar(45) DEFAULT NULL,
+  `delivery_type` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  KEY `fk_transactions_offer` (`offerId`),
+  CONSTRAINT `fk_transactions_offer` FOREIGN KEY (`offerId`) REFERENCES `offers` (`offerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `offer_transactions`
+--
+
+LOCK TABLES `offer_transactions` WRITE;
+/*!40000 ALTER TABLE `offer_transactions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `offer_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `offers`
@@ -48,6 +76,35 @@ LOCK TABLES `offers` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `request_transactions`
+--
+
+DROP TABLE IF EXISTS `request_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `request_transactions` (
+  `transactionId` int NOT NULL,
+  `requestId` int DEFAULT NULL,
+  `quantity_fulfilled` varchar(45) DEFAULT NULL,
+  `transaction_date` datetime DEFAULT NULL,
+  `final_cost` varchar(45) DEFAULT NULL,
+  `delivery_type` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  KEY `fk_transactions_request_idx` (`requestId`),
+  CONSTRAINT `fk_transactions_request` FOREIGN KEY (`requestId`) REFERENCES `requests` (`requestId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `request_transactions`
+--
+
+LOCK TABLES `request_transactions` WRITE;
+/*!40000 ALTER TABLE `request_transactions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `request_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `requests`
 --
 
@@ -55,12 +112,13 @@ DROP TABLE IF EXISTS `requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `requests` (
-  `requestId` int AUTO_INCREMENT NOT NULL,
+  `requestId` int NOT NULL,
   `user_email` varchar(64) DEFAULT NULL,
   `min_quantity` float DEFAULT NULL,
   `quantity` float DEFAULT NULL,
   `urgency` smallint DEFAULT NULL,
   `item` varchar(32) DEFAULT NULL,
+  `fulfilled` tinyint DEFAULT NULL,
   PRIMARY KEY (`requestId`),
   KEY `fk_email_idx` (`user_email`),
   CONSTRAINT `fk_requests_email` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -91,7 +149,7 @@ CREATE TABLE `reviews` (
   `desc` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`reviewId`),
   KEY `fk_transactions_idx` (`transactionId`),
-  CONSTRAINT `fk_transactions` FOREIGN KEY (`transactionId`) REFERENCES `transactions` (`transactionId`)
+  CONSTRAINT `fk_transactions` FOREIGN KEY (`transactionId`) REFERENCES `request_transactions` (`transactionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -102,38 +160,6 @@ CREATE TABLE `reviews` (
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `transactions`
---
-
-DROP TABLE IF EXISTS `transactions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `transactions` (
-  `transactionId` int NOT NULL,
-  `offerId` int DEFAULT NULL,
-  `requestId` int DEFAULT NULL,
-  `quantity_fulfilled` varchar(45) DEFAULT NULL,
-  `transaction_date` varchar(45) DEFAULT NULL,
-  `final_cost` varchar(45) DEFAULT NULL,
-  `delivery_type` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`transactionId`),
-  KEY `fk_transactions_request_idx` (`requestId`),
-  KEY `fk_transactions_offer_idx` (`offerId`),
-  CONSTRAINT `fk_transactions_offer` FOREIGN KEY (`offerId`) REFERENCES `offers` (`offerId`),
-  CONSTRAINT `fk_transactions_request` FOREIGN KEY (`requestId`) REFERENCES `requests` (`requestId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `transactions`
---
-
-LOCK TABLES `transactions` WRITE;
-/*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -180,4 +206,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-08 17:53:17
+-- Dump completed on 2020-05-09 13:09:33
