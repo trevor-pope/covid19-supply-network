@@ -76,16 +76,15 @@ class RegisterUser(Resource):
 profile_parser = api.parser()
 profile_parser.add_argument('email', location='args', default='email')
 
-@api.route('/profile/<email>') #was thinking of using f'/{UserName}' here is that doable?
+@api.route('/profile')
 class ViewUser(Resource):
 
-	@api.expect(profile_parser)
-	def get(self, email):
-		args = profile_parser.parse_args()
-		print(args)
+    @api.expect(profile_parser)
+    def get(self):
+        args = profile_parser.parse_args()
+        print(args)
+        email = args.get('email')
 
-		search = '%{}%'.format(email)
+        user_res = session.query(User).filter(User.email.like(f'%{email}%')).all()[0]
 
-		user_res = session.query(User).filter(User.like(f'%{email}%')).all()[0]
-
-		return user_res.json()
+        return user_res.json()
