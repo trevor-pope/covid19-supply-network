@@ -13,14 +13,18 @@ class Request(Base):
     quantity = Column(Float)
     urgency = Column(Integer)
     item = Column(String)
+    fulfilled = Column(Binary)
+    is_surplus = Column(Binary)
 
-    def __init__(self, user_email, quantity, item, min_quantity, urgency=0):
+    def __init__(self, user_email, quantity, item, min_quantity, urgency, fulfilled, is_surplus):
         self.requestID = Request.requestID
         self.user_email = user_email
         self.min_quantity = min_quantity
         self.quantity = quantity
         self.item = item
         self.urgency = urgency
+        self.fulfilled = fulfilled
+        self.is_surplus = is_surplus
 
     # Note, we pull Request.requestID because we let it autoincrement,
     # but it only updates after the new request has been committed to the db, so we wary of that I guess. -Trevor
@@ -33,5 +37,7 @@ class Request(Base):
                 'min_quantity': self.min_quantity,
                 'quantity': self.quantity,
                 'item': self.item,
-                'urgency': self.urgency}
+                'urgency': self.urgency,
+                'fulfilled': self.fulfilled,
+                'is_surplus': self.is_surplus}
 

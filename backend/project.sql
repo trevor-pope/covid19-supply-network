@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS covid_supply;
+CREATE DATABASE covid_supply;
+USE covid_supply;
 -- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
 --
 -- Host: localhost    Database: covid_supply
@@ -15,38 +18,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `offer_transactions`
---
-
-DROP TABLE IF EXISTS `offer_transactions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `offer_transactions` (
-  `transactionId` int NOT NULL,
-  `offerId` int DEFAULT NULL,
-  `requestId` int DEFAULT NULL,
-  `quantity_fulfilled` varchar(45) DEFAULT NULL,
-  `transaction_date` datetime DEFAULT NULL,
-  `final_cost` varchar(45) DEFAULT NULL,
-  `delivery_type` varchar(45) DEFAULT NULL,
-  `is_supplier` tinyint DEFAULT NULL,
-  `score` int DEFAULT NULL,
-  `desc` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`transactionId`),
-  KEY `fk_transactions_offer` (`offerId`),
-  CONSTRAINT `fk_transactions_offer` FOREIGN KEY (`offerId`) REFERENCES `offers` (`offerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `offer_transactions`
---
-
-LOCK TABLES `offer_transactions` WRITE;
-/*!40000 ALTER TABLE `offer_transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `offer_transactions` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `offers`
@@ -57,13 +28,18 @@ DROP TABLE IF EXISTS `offers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `offers` (
   `offerId` int NOT NULL,
-  `user_email` varchar(64) DEFAULT NULL,
+  `requestId` int NOT NULL,
+  `isPending` tinyint(1) NOT NULL,
+  `isConfirmed` tinyint(1) DEFAULT NULL,
+  `user_email` varchar(64) NOT NULL,
   `quantity` float DEFAULT NULL,
   `item` varchar(32) DEFAULT NULL,
   `price` float DEFAULT NULL,
   `willing_to_transport` tinyint DEFAULT NULL,
   PRIMARY KEY (`offerId`),
   KEY `fk_email_idx` (`user_email`),
+  KEY `fk_request_idx` (`requestId`),
+  CONSTRAINT `fk_offer_request` FOREIGN KEY (`requestId`) REFERENCES `requests` (`requestId`),
   CONSTRAINT `fk_offer_email` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -75,35 +51,6 @@ CREATE TABLE `offers` (
 LOCK TABLES `offers` WRITE;
 /*!40000 ALTER TABLE `offers` DISABLE KEYS */;
 /*!40000 ALTER TABLE `offers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `request_transactions`
---
-
-DROP TABLE IF EXISTS `request_transactions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `request_transactions` (
-  `transactionId` int NOT NULL,
-  `requestId` int DEFAULT NULL,
-  `quantity_fulfilled` varchar(45) DEFAULT NULL,
-  `transaction_date` datetime DEFAULT NULL,
-  `final_cost` varchar(45) DEFAULT NULL,
-  `delivery_type` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`transactionId`),
-  KEY `fk_transactions_request_idx` (`requestId`),
-  CONSTRAINT `fk_transactions_request` FOREIGN KEY (`requestId`) REFERENCES `requests` (`requestId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `request_transactions`
---
-
-LOCK TABLES `request_transactions` WRITE;
-/*!40000 ALTER TABLE `request_transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `request_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -120,6 +67,7 @@ CREATE TABLE `requests` (
   `quantity` float DEFAULT NULL,
   `urgency` smallint DEFAULT NULL,
   `item` varchar(32) DEFAULT NULL,
+  `num_offers` int DEFAULT NULL,
   `fulfilled` tinyint DEFAULT NULL,
   `is_surplus` tinyint DEFAULT NULL,
   PRIMARY KEY (`requestId`),
@@ -168,11 +116,11 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('username','$2b$12$fLcAD3pw/zwEMIQEEA8FlOwX6wudgMdgJFVotJsoxCvD6dpdN6zdC','email','phone','picture','street','city','state','zipco','fname','lname',0,5);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
