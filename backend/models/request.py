@@ -26,7 +26,7 @@ class Request(Base):
     # Note, we pull Request.requestID because we let it autoincrement,
     # but it only updates after the new request has been committed to the db, so we wary of that I guess. -Trevor
     def __str__(self):
-        return f'Request {Request.requestID} from {self.user_email} (MAY NOT BE UNIQUE)'
+        return f'Request {self.requestID} from {self.user_email} (MAY NOT BE UNIQUE)'
 
     def json(self):
         return {'request': {'requestID': self.requestID,
