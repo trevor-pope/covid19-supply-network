@@ -3,8 +3,8 @@ from src import bcrypt, session
 from models.user import User
 
 api = Namespace('auth', description='Authentication related operations')
-login_parser = api.parser()
 
+login_parser = api.parser()
 login_parser.add_argument('username', location='args', default='username')
 login_parser.add_argument('password', location='args', default='password')
 login_parser.add_argument('email', location='args', default='email')
@@ -35,8 +35,8 @@ class LoginUser(Resource):
 
         return {'response': 'no user found'}
 
-register_parser = api.parser()
 
+register_parser = api.parser()
 register_parser.add_argument('fname', location='args', default='fname')
 register_parser.add_argument('lname', location='args', default='lname')
 register_parser.add_argument('username', location='args', default='username')
@@ -71,3 +71,20 @@ class RegisterUser(Resource):
             session.commit()
 
             return {'response': 'success'}
+
+
+profile_parser = api.parser()
+profile_parser.add_argument('email', location='args', default='email')
+
+@api.route('/profile')
+class ViewUser(Resource):
+
+    @api.expect(profile_parser)
+    def get(self):
+        args = profile_parser.parse_args()
+        print(args)
+        email = args.get('email')
+
+        user_res = session.query(User).filter(User.email.like(f'%{email}%')).all()[0]
+
+        return user_res.json()

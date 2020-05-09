@@ -4,7 +4,6 @@ from sqlalchemy import Integer, String, Binary, Float
 
 Base = declarative_base()
 
-
 class Request(Base):
     __tablename__ = 'requests'
 

@@ -4,7 +4,6 @@ from sqlalchemy import Integer, String, Binary, Float
 
 Base = declarative_base()
 
-
 class User(Base):
     __tablename__ = 'users'
 
@@ -41,7 +40,15 @@ class User(Base):
         return f'{self.fname} {self.lname}: {self.username}'
 
     def json(self):
-        return {'user': {'email': self.email, 'phone': self.phone, 'username': self.username,
-                         'picture': self.picture, 'street': self.street, 'city': self.city, 'state': self.state,
-                         'zipcode': self.zipcode, 'fname': self.fname, 'lname': self.lname,
-                         'num_transactions': self.num_transactions, 'rating': self.rating}}
+        return {'email': self.email,
+                'phone': self.phone,
+                'username': self.username,
+                'picture': self.picture,
+                'street': self.street,
+                'city': self.city,
+                'state': self.state,
+                'zipcode': self.zipcode,
+                'fname': self.fname,
+                'lname': self.lname,
+                'num_transactions': self.num_transactions,
+                'rating': self.rating}
