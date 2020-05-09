@@ -2,23 +2,20 @@ from flask_restplus import Namespace, Resource
 from src import bcrypt, session
 from models import User
 
-api = Namespace('auth', description='Authentication related operations')
-login_parser = api.parser()
+api = Namespace('review', description='Review related operations')
+parser1 = api.parser()
 
-login_parser.add_argument('username', location='args', default='username')
-login_parser.add_argument('password', location='args', default='password')
-login_parser.add_argument('email', location='args', default='email')
+parser1.add_argument('email', location='args', default='email')
 
-@api.route('/login')
-class LoginUser(Resource):
+@api.route('/view')
+class ViewReviews(Resource):
 
-    @api.expect(login_parser)
+    @api.expect(parser1)
     def get(self):
-        args = login_parser.parse_args()
+        args = parser1.parse_args()
         print(args)
 
-        username = args.get('username')
-        password = args.get('password')
+        username = args.get('email')
         pwd_hash = bcrypt.generate_password_hash(password)
 
         users = session.query(User).filter(
@@ -28,7 +25,7 @@ class LoginUser(Resource):
             user = users[0]
             correct = bcrypt.check_password_hash(user.password, password)
 
-            if correct:
+            if correct: 
                 return {'response': 'success'}
             else:
                 return {'response': 'bad password'}
@@ -43,7 +40,7 @@ register_parser.add_argument('username', location='args', default='username')
 register_parser.add_argument('password', location='args', default='password')
 register_parser.add_argument('email', location='args', default='email')
 
-@api.route('/register')
+@api.route('/add')
 class RegisterUser(Resource):
 
     @api.expect(register_parser)

@@ -39,6 +39,15 @@ class User(Base):
     def __str__(self):
         return f'{self.fname} {self.lname}: {self.username}'
 
+    def json(self):
+        return {'firstname': fname,
+                'lastname': lname,
+                'email': email,
+                'phone': phone,
+                'picture': picture,
+                'num_transactions': num_transactions,
+                'rating': rating}
+
 
 class Request(Base):
     __tablename__ = 'requests'
@@ -64,10 +73,9 @@ class Request(Base):
         return f'Request {Request.requestID} from {self.user_email} (MAY NOT BE UNIQUE)'
 
     def json(self):
-        return {'request': {'requestID': self.requestID,
-                            'user_email': self.user_email,
-                            'min_quantity': self.min_quantity,
-                            'quantity': self.quantity,
-                            'item': self.item,
-                            'urgency': self.urgency}}
-
+        return {'requestID': self.requestID,
+                'user_email': self.user_email,
+                'min_quantity': self.min_quantity,
+                'quantity': self.quantity,
+                'item': self.item,
+                'urgency': self.urgency}
