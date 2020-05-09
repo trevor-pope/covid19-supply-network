@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource
 from src import session
-from models import User, Request
+from models.user import User
+from models.request import Request
 import urllib3
 import json
 

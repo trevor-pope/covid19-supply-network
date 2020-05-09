@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Resource
 from src import bcrypt, session
-from models import User
+from models.user import User
 
 api = Namespace('auth', description='Authentication related operations')
 
