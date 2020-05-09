@@ -76,6 +76,15 @@ CREATE TABLE `requests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `reviews`;
+CREATE TABLE `reviews` (
+  `revOfferId` int NOT NULL,
+  `score` int DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  PRIMARY KEY (`RevOfferId`),
+  CONSTRAINT `fk_review_offerId` FOREIGN KEY (`revOfferId`) REFERENCES `offers` (`offerId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 --
 -- Dumping data for table `requests`
 --
