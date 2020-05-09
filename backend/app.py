@@ -4,7 +4,6 @@ from src import app
 
 api = Api(app)
 
-
 from src.auth import api as api_auth
 from src.request import api as api_request
 

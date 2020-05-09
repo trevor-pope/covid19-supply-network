@@ -42,6 +42,7 @@ register_parser.add_argument('lname', location='args', default='lname')
 register_parser.add_argument('username', location='args', default='username')
 register_parser.add_argument('password', location='args', default='password')
 register_parser.add_argument('email', location='args', default='email')
+register_parser.add_argument('zipcode', location='args', default='90210')
 
 @api.route('/register')
 class RegisterUser(Resource):
@@ -49,8 +50,6 @@ class RegisterUser(Resource):
     @api.expect(register_parser)
     def post(self):
         args = register_parser.parse_args()
-        print(args)
-
         username = args.get('username')
         # find if username exists
         results = session.query(User).filter(User.username == username)
@@ -64,8 +63,9 @@ class RegisterUser(Resource):
 
             password = args.get('password')
             pwd_hash = bcrypt.generate_password_hash(password)
+            zipcode = args.get('zipcode')
 
-            user = User(username=username, password=pwd_hash, email=args.get('email'))
+            user = User(username=username, password=pwd_hash, email=args.get('email'), zipcode=zipcode)
             print(user)
             session.add(user)
             session.commit()

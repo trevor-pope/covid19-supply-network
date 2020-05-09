@@ -9,12 +9,15 @@ api = Namespace('request', description='Request related operations')
 
 @api.route('/getuser')
 class RequestsGetUser(Resource):
-    request_parser = api.parser()
-    request_parser.add_argument('email', location='args')
+    """
+    Retrieve all requests for a single user.
+    """
+    parser = api.parser()
+    parser.add_argument('email', location='args')
 
-    @api.expect(request_parser)
+    @api.expect(parser)
     def get(self):
-        args = RequestsGetUser.request_parser.parse_args()
+        args = RequestsGetUser.parser.parse_args()
         email = args.get('email')
         requests_from_user = session.query(Request).filter(Request.user_email == email).all()
 
@@ -23,24 +26,28 @@ class RequestsGetUser(Resource):
 
 @api.route('/getall')
 class RequestsGetAll(Resource):
-    request_parser = api.parser()
-    request_parser.add_argument('email', location='args')
-    request_parser.add_argument('sort', location='args')
-    request_parser.add_argument('item_filter', location='args')
+    """
+    Retrieve all requests from all users, with optional sorting and searching parameters.
+    """
+    parser = api.parser()
+    parser.add_argument('email', location='args')
+    parser.add_argument('sort', location='args')
+    parser.add_argument('item_filter', location='args')
 
-    @api.expect(request_parser)
+    @api.expect(parser)
     def get(self):
-        ZIPCODE_API_KEY = 'iMVNI7irDtVXi3aqsMoMpFfIYswPzoqVlDWyljkxbZg7YYicJ1ihpVBcr6dnMfrU'
-        args = RequestsGetAll.request_parser.parse_args()
+        ZIPCODE_API_KEY = "iMVNI7irDtVXi3aqsMoMpFfIYswPzoqVlDWyljkxbZg7YYicJ1ihpVBcr6dnMfrU"
+        args = RequestsGetAll.parser.parse_args()
         email, sort, item_filter = args.get('email'), args.get('sort'), args.get('item_filter')
 
         requests = session.query(Request)
         if item_filter is not None:
-            requests = requests.filter(Request.item == item_filter)  # == for now, should probably be an approximate match
+            requests = requests.filter(
+                Request.item == item_filter)  # == for now, should probably be an approximate match
 
         requests = requests.all()
 
-        if sort in ['distance', None]:
+        if sort in ['distance', None]:  # By default, sort by distance
             user_zip = session.query(User).filter(User.email == email)[0].zipcode
             http = urllib3.PoolManager()
 
@@ -53,23 +60,31 @@ class RequestsGetAll(Resource):
                 return distance
 
             requests = sorted(requests, key=get_distance)
+            print(requests)
+            print([request.json() for request in requests])
 
-        return {'response': requests}
+        return {'response': [request.json() for request in requests]}
 
-register_parser = api.parser()
 
-register_parser.add_argument('fname', location='args', default='fname')
-register_parser.add_argument('lname', location='args', default='lname')
-register_parser.add_argument('username', location='args', default='username')
-register_parser.add_argument('password', location='args', default='password')
-register_parser.add_argument('email', location='args', default='email')
+@api.route('/create')
+class CreateRequest(Resource):
+    """
+    Create a new request for a given user.
+    """
+    parser = api.parser()
+    parser.add_argument('user_email', location='args', default='email')
+    parser.add_argument('min_quantity', location='args', default=0)
+    parser.add_argument('quantity', location='args', default=0)
+    parser.add_argument('urgency', location='args', default=0)
+    parser.add_argument('item', location='args', default='mask')
 
-@api.route('/add')
-class RequestAdd(Resource):
-
-    @api.expect(register_parser)
+    @api.expect(parser)
     def post(self):
-        args = register_parser.parse_args()
-        print(args)
+        args = CreateRequest.parser.parse_args()
+
+        request = Request(user_email=args.get('user_email'), min_quantity=args.get('min_quantity'),
+                          quantity=args.get('quantity'), urgency=args.get('urgency'), item=args.get('item'))
+        session.add(request)
+        session.commit()
 
         return {'response': 'success'}
