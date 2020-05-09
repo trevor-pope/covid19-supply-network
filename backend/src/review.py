@@ -9,7 +9,6 @@ import json
 
 api = Namespace('review', description='Review related operations')
 
-
 parser1 = api.parser()
 parser1.add_argument('email', location='args', default='email')
 

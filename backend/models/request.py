@@ -7,7 +7,7 @@ Base = declarative_base()
 class Request(Base):
     __tablename__ = 'requests'
 
-    requestID = Column(Integer, primary_key=True, autoincrement=True)
+    requestId = Column(Integer, primary_key=True, autoincrement=True)
     user_email = Column(String, ForeignKey('users.email'))
     min_quantity = Column(Float)
     quantity = Column(Float)
@@ -17,7 +17,7 @@ class Request(Base):
     is_surplus = Column(Binary)
 
     def __init__(self, user_email, quantity, item, min_quantity, urgency, fulfilled, is_surplus):
-        self.requestID = Request.requestID
+        self.requestId= Request.requestId
         self.user_email = user_email
         self.min_quantity = min_quantity
         self.quantity = quantity
@@ -29,10 +29,10 @@ class Request(Base):
     # Note, we pull Request.requestID because we let it autoincrement,
     # but it only updates after the new request has been committed to the db, so we wary of that I guess. -Trevor
     def __str__(self):
-        return f'Request {self.requestID} from {self.user_email} (MAY NOT BE UNIQUE)'
+        return f'Request {self.requestId} from {self.user_email} (MAY NOT BE UNIQUE UNTIL DB COMMIT)'
 
     def json(self):
-        return {'requestID': self.requestID,
+        return {'requestID': self.requestId,
                 'user_email': self.user_email,
                 'min_quantity': self.min_quantity,
                 'quantity': self.quantity,
@@ -40,4 +40,5 @@ class Request(Base):
                 'urgency': self.urgency,
                 'fulfilled': self.fulfilled,
                 'is_surplus': self.is_surplus}
+
 
