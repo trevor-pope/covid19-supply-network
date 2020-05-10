@@ -35,6 +35,7 @@ CREATE TABLE `offers` (
   `quantity` float DEFAULT NULL,
   `price` float DEFAULT NULL,
   `willing_to_transport` tinyint DEFAULT NULL,
+  `offerPic` text DEFAULT NULL,
   PRIMARY KEY (`offerId`),
   KEY `fk_email_idx` (`user_email`),
   KEY `fk_request_idx` (`requestId`),
@@ -77,7 +78,7 @@ CREATE TABLE `requests` (
 DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE `reviews` (
   `revOfferId` int NOT NULL,
-  `score` int DEFAULT NULL,
+  `score` int(1) DEFAULT NULL,
   `description` text DEFAULT NULL,
   PRIMARY KEY (`RevOfferId`),
   CONSTRAINT `fk_review_offerId` FOREIGN KEY (`revOfferId`) REFERENCES `offers` (`offerId`) ON DELETE CASCADE ON UPDATE CASCADE
