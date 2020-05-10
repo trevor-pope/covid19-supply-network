@@ -4,6 +4,7 @@ from sqlalchemy import Integer, String, Binary, Float
 
 Base = declarative_base()
 
+
 class Request(Base):
     __tablename__ = 'requests'
 
@@ -16,14 +17,13 @@ class Request(Base):
     fulfilled = Column(Binary)
     is_surplus = Column(Binary)
 
-    def __init__(self, user_email, quantity, item, min_quantity, urgency, fulfilled, is_surplus):
-        self.requestId= Request.requestId
+    def __init__(self, user_email, quantity, item, urgency, is_surplus):
+        self.requestId = Request.requestId
         self.user_email = user_email
-        self.min_quantity = min_quantity
         self.quantity = quantity
         self.item = item
         self.urgency = urgency
-        self.fulfilled = fulfilled
+        self.fulfilled = False
         self.is_surplus = is_surplus
 
     # Note, we pull Request.requestID because we let it autoincrement,
@@ -34,7 +34,6 @@ class Request(Base):
     def json(self):
         return {'requestID': self.requestId,
                 'user_email': self.user_email,
-                'min_quantity': self.min_quantity,
                 'quantity': self.quantity,
                 'item': self.item,
                 'urgency': self.urgency,

@@ -27,13 +27,12 @@ DROP TABLE IF EXISTS `offers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `offers` (
-  `offerId` int NOT NULL,
+  `offerId` int auto_increment NOT NULL,
   `requestId` int NOT NULL,
   `isPending` tinyint(1) NOT NULL,
   `isConfirmed` tinyint(1) DEFAULT NULL,
   `user_email` varchar(64) NOT NULL,
   `quantity` float DEFAULT NULL,
-  `item` varchar(32) DEFAULT NULL,
   `price` float DEFAULT NULL,
   `willing_to_transport` tinyint DEFAULT NULL,
   PRIMARY KEY (`offerId`),
@@ -61,9 +60,8 @@ DROP TABLE IF EXISTS `requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `requests` (
-  `requestId` int NOT NULL,
+  `requestId` int auto_increment NOT NULL,
   `user_email` varchar(64) DEFAULT NULL,
-  `min_quantity` float DEFAULT NULL,
   `quantity` float DEFAULT NULL,
   `urgency` smallint DEFAULT NULL,
   `item` varchar(32) DEFAULT NULL,
