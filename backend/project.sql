@@ -27,15 +27,15 @@ DROP TABLE IF EXISTS `offers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `offers` (
-  `offerId` int NOT NULL,
+  `offerId` int auto_increment NOT NULL,
   `requestId` int NOT NULL,
   `isPending` tinyint(1) NOT NULL,
   `isConfirmed` tinyint(1) DEFAULT NULL,
   `user_email` varchar(64) NOT NULL,
   `quantity` float DEFAULT NULL,
-  `item` varchar(32) DEFAULT NULL,
   `price` float DEFAULT NULL,
   `willing_to_transport` tinyint DEFAULT NULL,
+  `offerPic` text DEFAULT NULL,
   PRIMARY KEY (`offerId`),
   KEY `fk_email_idx` (`user_email`),
   KEY `fk_request_idx` (`requestId`),
@@ -61,9 +61,8 @@ DROP TABLE IF EXISTS `requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `requests` (
-  `requestId` int NOT NULL,
+  `requestId` int auto_increment NOT NULL,
   `user_email` varchar(64) DEFAULT NULL,
-  `min_quantity` float DEFAULT NULL,
   `quantity` float DEFAULT NULL,
   `urgency` smallint DEFAULT NULL,
   `item` varchar(32) DEFAULT NULL,
@@ -75,6 +74,15 @@ CREATE TABLE `requests` (
   CONSTRAINT `fk_requests_email` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+DROP TABLE IF EXISTS `reviews`;
+CREATE TABLE `reviews` (
+  `revOfferId` int NOT NULL,
+  `score` int(1) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  PRIMARY KEY (`RevOfferId`),
+  CONSTRAINT `fk_review_offerId` FOREIGN KEY (`revOfferId`) REFERENCES `offers` (`offerId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `requests`

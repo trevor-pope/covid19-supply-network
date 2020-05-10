@@ -76,6 +76,7 @@ class RegisterUser(Resource):
 profile_parser = api.parser()
 profile_parser.add_argument('email', location='args', default='email')
 
+
 @api.route('/profile')
 class ViewUser(Resource):
 

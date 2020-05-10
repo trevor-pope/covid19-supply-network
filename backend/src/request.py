@@ -8,7 +8,7 @@ import json
 api = Namespace('request', description='Request related operations')
 
 
-@api.route('/getusersurplus')
+@api.route('/getuser')
 class RequestsGetUser(Resource):
     """
     Retrieve all requests for a single user.
@@ -41,6 +41,8 @@ class RequestsGetAll(Resource):
         email, sort, item_filter = args.get('email'), args.get('sort'), args.get('item_filter')
 
         requests = session.query(Request)
+        requests.filter(Request.fulfilled == False)
+
         if item_filter is not None:
             requests = requests.filter(
                 Request.item == item_filter)  # == for now, should probably be an approximate match
@@ -72,19 +74,36 @@ class CreateRequest(Resource):
     Create a new request for a given user.
     """
     parser = api.parser()
-    parser.add_argument('user_email', location='args', default='email')
-    parser.add_argument('min_quantity', location='args', default=0)
+    parser.add_argument('user_email', location='args')
     parser.add_argument('quantity', location='args', default=0)
     parser.add_argument('urgency', location='args', default=0)
     parser.add_argument('item', location='args', default='mask')
+    parser.add_argument('is_surplus', location='args', default=False)
 
     @api.expect(parser)
     def post(self):
         args = CreateRequest.parser.parse_args()
 
-        request = Request(user_email=args.get('user_email'), min_quantity=args.get('min_quantity'),
-                          quantity=args.get('quantity'), urgency=args.get('urgency'), item=args.get('item'))
+        request = Request(user_email=args.get('user_email'), quantity=args.get('quantity'),
+                          urgency=args.get('urgency'), item=args.get('item'), is_surplus=args.get('is_surplus'))
         session.add(request)
+        session.commit()
+
+        return {'response': 'success'}
+
+
+@api.route('/fulfill')
+class SetFulfilled(Resource):
+    """
+    Create a new request for a given user.
+    """
+    parser = api.parser()
+    parser.add_argument('requestId', location='args', required=True)
+
+    @api.expect(parser)
+    def post(self):
+        args = SetFulfilled.parser.parse_args()
+        request = session.query(Request).filter(Request.requestId == args.get('requestId')).update({'fulfilled': True})
         session.commit()
 
         return {'response': 'success'}
